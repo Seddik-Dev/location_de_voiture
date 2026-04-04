@@ -3,7 +3,7 @@ import Footer from '@/components/footer'
 import FleetPageContent from '@/components/fleet-page-content'
 
 export const metadata = {
-  title: 'Flotte — Atlas Drive | Location au Maroc (MAD)',
+  title: 'Fleet | Atlas Drive | Location au Maroc (MAD)',
   description:
     'Découvrez nos véhicules premium et économiques à louer au Maroc. Tarifs en dirhams (MAD) par jour — Casablanca, Marrakech, Rabat et plus.',
 }
