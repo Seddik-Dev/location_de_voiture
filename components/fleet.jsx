@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Button } from './ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { fleetCars } from '@/lib/fleet-data'
 import { FleetCarCard } from './fleet-car-card'
 
 export default function Fleet() {

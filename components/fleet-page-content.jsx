@@ -14,10 +14,9 @@ import {
   SelectItem,
 } from "./ui/select";
 import { ArrowLeft, SlidersHorizontal, LayoutGrid, Rows } from "lucide-react";
-import { fleetCars } from "@/lib/fleet-data";
 import { FleetCarCard } from "./fleet-car-card";
 
-export default function FleetPageContent() {
+export default function FleetPageContent({ initialCars = [], loadError = false }) {
   const [city, setCity] = useState("all");
   const [category, setCategory] = useState("all");
   const [minPrice, setMinPrice] = useState("");
@@ -25,16 +24,24 @@ export default function FleetPageContent() {
   const [daysInput, setDaysInput] = useState("1");
   const [viewMode, setViewMode] = useState("grid");
 
+  const cars = initialCars;
+
   const days = useMemo(() => {
     const n = parseInt(daysInput, 10);
     return Number.isFinite(n) && n >= 1 ? n : 1;
   }, [daysInput]);
 
-  const cities = [...new Set(fleetCars.map((car) => car.city))];
-  const categories = [...new Set(fleetCars.map((car) => car.category))];
+  const cities = useMemo(
+    () => [...new Set(cars.map((car) => car.city).filter(Boolean))].sort(),
+    [cars],
+  );
+  const categories = useMemo(
+    () => [...new Set(cars.map((car) => car.category).filter(Boolean))].sort(),
+    [cars],
+  );
 
   const filteredCars = useMemo(() => {
-    return fleetCars.filter((car) => {
+    return cars.filter((car) => {
       const matchCity = city === "all" || car.city === city;
       const matchCategory = category === "all" || car.category === category;
       const matchMin = minPrice === "" || car.priceMAD >= Number(minPrice);
@@ -42,7 +49,7 @@ export default function FleetPageContent() {
 
       return matchCity && matchCategory && matchMin && matchMax;
     });
-  }, [city, category, minPrice, maxPrice]);
+  }, [cars, city, category, minPrice, maxPrice]);
 
   return (
     <>
@@ -61,8 +68,15 @@ export default function FleetPageContent() {
             </Button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Notre fleet au Maroc
+              Notre flotte au Maroc
             </h1>
+            {loadError ? (
+              <p className="text-destructive text-sm max-w-2xl">
+                Impossible de joindre la base de données. Vérifiez{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 text-xs">MONGODB_URI</code> dans{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 text-xs">.env.local</code>, puis relancez le serveur.
+              </p>
+            ) : null}
           </motion.div>
         </div>
       </section>
@@ -203,11 +217,19 @@ export default function FleetPageContent() {
                   : "flex flex-col gap-6"
               }
             >
+              {!loadError && cars.length === 0 ? (
+                <p className="text-muted-foreground col-span-full">
+                  Aucun véhicule enregistré pour le moment. Ajoutez des documents dans la collection{" "}
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-xs">cars</code> (via l&apos;API{" "}
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-xs">POST /api/cars</code> ou MongoDB
+                  Compass).
+                </p>
+              ) : null}
               {filteredCars.map((car, index) => (
                 <FleetCarCard
                   key={car.id}
                   car={car}
-                  layout={viewMode === 'grid' ? 'grid' : 'row'}
+                  layout={viewMode === "grid" ? "grid" : "row"}
                   index={index}
                   totalPrice={car.priceMAD * days}
                   days={days}

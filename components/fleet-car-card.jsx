@@ -66,7 +66,7 @@ export function FleetCarCard({
 
         {/* Features */}
         <div className="space-y-2 mb-5">
-          {car.features.map((feature, i) => (
+          {(car.features || []).map((feature, i) => (
             <div
               key={i}
               className="text-sm text-muted-foreground flex items-center gap-2"
