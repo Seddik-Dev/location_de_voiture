@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
 import { Button } from './ui/button'
@@ -9,11 +10,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { label: 'Accueil', href: '#' },
-    { label: 'Nos voitures', href: '#fleet' },
-    { label: 'Pourquoi nous', href: '#why' },
-    { label: 'Avis clients', href: '#testimonials' },
-    { label: 'Contact', href: '#footer' },
+    { label: 'Accueil', href: '/' },
+    { label: 'Nos voitures', href: '/fleet' },
+    { label: 'Pourquoi nous', href: '/#why' },
+    { label: 'Avis clients', href: '/#testimonials' },
+    { label: 'Contact', href: '/#footer' },
   ]
 
   return (
@@ -26,26 +27,24 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <motion.div 
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="text-2xl font-bold text-primary">⦰</div>
-            <span className="text-xl font-bold text-foreground">Atlas Drive</span>
-          </motion.div>
+          <Link href="/" className="flex items-center gap-2">
+            <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
+              <div className="text-2xl font-bold text-primary">⦰</div>
+              <span className="text-xl font-bold text-foreground">Atlas Drive</span>
+            </motion.div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <motion.a
-                key={item.label}
-                href={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {item.label}
-              </motion.a>
+              <motion.div key={item.label} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href={item.href}
+                  className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -85,14 +84,14 @@ export default function Navbar() {
             className="md:hidden pb-4"
           >
             {navItems.map((item) => (
-              <motion.a
+              <Link
                 key={item.label}
                 href={item.href}
                 className="block py-2 text-sm font-medium text-foreground hover:text-primary"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
-              </motion.a>
+              </Link>
             ))}
           </motion.div>
         )}
