@@ -6,6 +6,7 @@ import { Button } from './ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FleetCarCard } from './fleet-car-card'
+import { fleetCars } from '@/lib/fleet-data'
 
 export default function Fleet() {
   const scrollRef = useRef(null)
@@ -20,6 +21,7 @@ export default function Fleet() {
       })
     }
   }
+  
 
   return (
     <section id="fleet" className="py-20 px-4 bg-gradient-to-b from-background to-secondary">
